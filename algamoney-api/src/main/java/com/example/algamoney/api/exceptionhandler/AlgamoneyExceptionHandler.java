@@ -3,7 +3,6 @@ package com.example.algamoney.api.exceptionhandler;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -20,8 +19,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-public class AlgamoneyException extends ResponseEntityExceptionHandler {
-	
+public class AlgamoneyExceptionHandler extends ResponseEntityExceptionHandler {
+
 	@Autowired
 	private MessageSource messageSource;
 	
@@ -35,37 +34,32 @@ public class AlgamoneyException extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, erros, headers, HttpStatus.BAD_REQUEST, request);
 	}
 	
-	
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		List<Erro> errors = createErrorList(ex.getBindingResult());
 		
-		return handleExceptionInternal(ex, errors, headers, HttpStatus.BAD_REQUEST, request);
+		List<Erro> erros = criarListaDeErros(ex.getBindingResult());
+		return handleExceptionInternal(ex, erros, headers, HttpStatus.BAD_REQUEST, request);
 	}
 	
-	
-	private List<Erro> createErrorList (BindingResult bindingResult){
-		List<Erro> errors = new ArrayList<Erro>();
+	private List<Erro> criarListaDeErros(BindingResult bindingResult) {
+		List<Erro> erros = new ArrayList<>();
 		
-		for(FieldError fieldError : bindingResult.getFieldErrors()) {
-			
-			String mensagemUsuario = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());;
-			String mensagemDesenvolvedor = fieldError.toString();;
-			
-			errors.add(new Erro(mensagemUsuario, mensagemDesenvolvedor));
+		for (FieldError fieldError : bindingResult.getFieldErrors()) {
+			String mensagemUsuario = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
+			String mensagemDesenvolvedor = fieldError.toString();
+			erros.add(new Erro(mensagemUsuario, mensagemDesenvolvedor));
 		}
-		
-		
-		return errors;
+			
+		return erros;
 	}
 	
-	public static class Erro{
+	public static class Erro {
+		
 		private String mensagemUsuario;
 		private String mensagemDesenvolvedor;
 		
 		public Erro(String mensagemUsuario, String mensagemDesenvolvedor) {
-			super();
 			this.mensagemUsuario = mensagemUsuario;
 			this.mensagemDesenvolvedor = mensagemDesenvolvedor;
 		}
@@ -78,8 +72,6 @@ public class AlgamoneyException extends ResponseEntityExceptionHandler {
 			return mensagemDesenvolvedor;
 		}
 		
-		
-		
-		
 	}
+	
 }

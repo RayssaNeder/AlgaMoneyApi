@@ -22,29 +22,30 @@ import com.example.algamoney.api.repository.CategoriaRepository;
 @RestController
 @RequestMapping("/categorias")
 public class CategoriaResouce {
-	
+
 	@Autowired
 	private CategoriaRepository categoriaRepository;
 	
 	@GetMapping
-	public List<Categoria> listar(){
+	public List<Categoria> listar() {
 		return categoriaRepository.findAll();
-		
 	}
 	
 	@PostMapping
 	public ResponseEntity<Categoria> criar(@Valid @RequestBody Categoria categoria, HttpServletResponse response) {
 		Categoria categoriaSalva = categoriaRepository.save(categoria);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}").buildAndExpand(categoriaSalva.getCodigo()).toUri();
-		response.setHeader("Location", uri.toASCIIString());
 		
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}")
+			.buildAndExpand(categoriaSalva.getCodigo()).toUri();
+		response.setHeader("Location", uri.toASCIIString());
 		
 		return ResponseEntity.created(uri).body(categoriaSalva);
 	}
 	
 	@GetMapping("/{codigo}")
 	public ResponseEntity<Categoria> buscarPeloCodigo(@PathVariable Long codigo) {
-		Categoria categoria =  categoriaRepository.findOne(codigo);
-		return categoria == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(categoria);
+		 Categoria categoria = categoriaRepository.findOne(codigo);
+		 return categoria != null ? ResponseEntity.ok(categoria) : ResponseEntity.notFound().build();
 	}
+	
 }
