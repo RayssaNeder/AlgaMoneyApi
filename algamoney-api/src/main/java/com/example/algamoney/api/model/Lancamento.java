@@ -20,7 +20,7 @@ public class Lancamento {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long codigo;
 	private String descricao;
 	@Column(name = "data_vencimento") 
 	private LocalDate dataVencimento;
@@ -32,17 +32,19 @@ public class Lancamento {
 	@JoinColumn(name = "codigo_categoria")
 	private Categoria categoria;
 	@Enumerated(EnumType.STRING)
-	private TipoLancamento tipoLancamento;
+	private TipoLancamento tipo;
 	@JoinColumn(name = "codigo_pessoa")
 	@ManyToOne
 	private Pessoa pessoa;
 	
 	
-	public Long getId() {
-		return id;
+	
+	
+	public Long getCodigo() {
+		return codigo;
 	}
-	public void setId(Long id) {
-		this.id = id;
+	public void setCodigo(Long codigo) {
+		this.codigo = codigo;
 	}
 	public String getDescricao() {
 		return descricao;
@@ -81,13 +83,13 @@ public class Lancamento {
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
 	}
-	public TipoLancamento getTipoLancamento() {
-		return tipoLancamento;
-	}
-	public void setTipoLancamento(TipoLancamento tipoLancamento) {
-		this.tipoLancamento = tipoLancamento;
-	}
 	
+	public TipoLancamento getTipo() {
+		return tipo;
+	}
+	public void setTipo(TipoLancamento tipo) {
+		this.tipo = tipo;
+	}
 	public Pessoa getPessoa() {
 		return pessoa;
 	}
@@ -98,7 +100,7 @@ public class Lancamento {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
 		return result;
 	}
 	@Override
@@ -110,14 +112,16 @@ public class Lancamento {
 		if (getClass() != obj.getClass())
 			return false;
 		Lancamento other = (Lancamento) obj;
-		if (id == null) {
-			if (other.id != null)
+		if (codigo == null) {
+			if (other.codigo != null)
 				return false;
-		} else if (!id.equals(other.id))
+		} else if (!codigo.equals(other.codigo))
 			return false;
 		return true;
 	}
 	
+	
+
 	
 	
 }
