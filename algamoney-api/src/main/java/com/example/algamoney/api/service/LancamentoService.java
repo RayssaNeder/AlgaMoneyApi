@@ -12,7 +12,7 @@ import com.example.algamoney.api.repository.PessoasRepository;
 import com.example.algamoney.api.service.exception.PessoaInexistenteOuInativaException;
 
 @Service
-public class lancamentoService {
+public class LancamentoService {
 	
 	@Autowired
 	private LancamentoRepository lancamentoRepository;

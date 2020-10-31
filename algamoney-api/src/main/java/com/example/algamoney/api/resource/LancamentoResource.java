@@ -14,6 +14,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.algamoney.api.event.ResourceCreatedEvent;
 import com.example.algamoney.api.exceptionhandler.AlgamoneyExceptionHandler.Erro;
 import com.example.algamoney.api.model.Lancamento;
-import com.example.algamoney.api.service.lancamentoService;
+import com.example.algamoney.api.repository.LancamentoRepository;
+import com.example.algamoney.api.repository.filter.LancamentoFilter;
+import com.example.algamoney.api.service.LancamentoService;
 import com.example.algamoney.api.service.exception.PessoaInexistenteOuInativaException;
 
 @RestController
@@ -30,7 +33,10 @@ import com.example.algamoney.api.service.exception.PessoaInexistenteOuInativaExc
 public class LancamentoResource {
 	
 	@Autowired
-	private lancamentoService lancamentoService;
+	private LancamentoService lancamentoService;
+	
+	@Autowired
+	private LancamentoRepository lancamentoRepository;
 	
 	@Autowired
 	private MessageSource messageSource;
@@ -38,8 +44,9 @@ public class LancamentoResource {
 	@Autowired
 	private ApplicationEventPublisher publisher;
 	
-	public List<Lancamento> listar(){
-		return lancamentoService.findAll();
+	@GetMapping
+	public List<Lancamento> pesquisar(LancamentoFilter lancamentoFilter){
+		return lancamentoRepository.filtrar(lancamentoFilter);
 	}
 	
 	@PostMapping
